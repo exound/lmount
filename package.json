@@ -1,0 +1,33 @@
+{
+  "name": "lmount",
+  "version": "0.0.1",
+  "description": "A simple functional reactive lens library built around flyd and ramda.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/exound/lmount.git"
+  },
+  "keywords": [
+    "flyd",
+    "ramda",
+    "functional",
+    "reactive"
+  ],
+  "license": "MIT",
+  "files": [
+    "dist/lmount.js"
+  ],
+  "main": "dist/lmount.js",
+  "scripts": {
+    "prepublish": "node_modules/.bin/babel src/lmount.js -o dist/lmount.js",
+    "test": "node_modules/.bin/mocha --compilers js:babel/register --reporter dot ./test/*.test.js"
+  },
+  "dependencies": {
+    "flyd": "~0.1.14",
+    "ramda": "~0.17.1"
+  },
+  "devDependencies": {
+    "babel": "~5.8.23",
+    "mocha": "~2.3.1",
+    "chai": "~2.1.0"
+  }
+}

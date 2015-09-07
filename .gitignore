@@ -1,0 +1,7 @@
+dist/*
+node_modules/*
+_*/*
+.DS_*
+*~
+*.swp
+*.log
