@@ -14,22 +14,41 @@ class Update {
 }
 
 export class Data {
-  static wrap(src) {
-    return new Data(src);
+  static wrap(src, {history} = {history: false}) {
+    return new Data(src, {history});
   }
 
-  constructor(src) {
+  constructor(src, {history}) {
     this.content$ = flyd.stream(src);
     this.updated$ = flyd.stream();
-    this.updates$ = flyd.scan((updates, update) => {
-      if (typeof update === "undefined") return [];
-      if (update.constructor !== Update) return updates;
 
-      this.content$(R.set(update.lens, update.to, this.content$()));
-      updates.push(update);
-      return updates;
-    }, [], this.updated$);
+    if (history) {
+      this.updates$ = flyd.scan(
+        this.record,
+        [],
+        this.updated$
+      );
+    } else {
+      flyd.on(this.update, this.updated$);
+    }
   }
+
+  record = (updates, update) => {
+    const result = this.update(update);
+
+    if (result) updates.push(result);
+
+    return updates;
+  };
+
+  update = (update) => {
+    if (typeof update === "undefined" ||
+        update.constructor !== Update) return;
+
+    this.content$(R.set(update.lens, update.to, this.content$()));
+
+    return update;
+  };
 
   on(listener) {
     flyd.on(listener, this.content$);
